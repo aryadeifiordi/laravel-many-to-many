@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\Type;
+use App\Models\Technology;
 
 class ProjectController extends Controller
 {
@@ -18,7 +19,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all(); 
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     public function store(Request $request)
@@ -27,6 +29,7 @@ class ProjectController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'type_id' => 'required|exists:types,id',
+            'technologies' => 'array|exists:technologies,id', 
         ]);
 
         $project = new Project;
@@ -34,6 +37,8 @@ class ProjectController extends Controller
         $project->description = $validatedData['description'];
         $project->type_id = $validatedData['type_id'];
         $project->save();
+
+        $project->technologies()->attach($validatedData['technologies']); 
 
         return redirect()->route('admin.projects.index');
     }
@@ -46,7 +51,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        $technologies = Technology::all(); 
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     public function update(Request $request, Project $project)
@@ -55,12 +61,15 @@ class ProjectController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'type_id' => 'required|exists:types,id',
+            'technologies' => 'array|exists:technologies,id', 
         ]);
 
         $project->name = $validatedData['name'];
         $project->description = $validatedData['description'];
         $project->type_id = $validatedData['type_id'];
         $project->save();
+
+        $project->technologies()->sync($validatedData['technologies']); 
 
         return redirect()->route('admin.projects.index');
     }

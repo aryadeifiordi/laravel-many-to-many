@@ -7,9 +7,14 @@
                 <div class="card">
                     <div class="card-header">Project Details</div>
                     <div class="card-body">
-                        <p><strong>Name:</strong> {{ $project->name }}</p>
-                        <p><strong>Description:</strong> {{ $project->description }}</p>
-                        <p><strong>Type:</strong> {{ $project->type->name ?? 'No type associated' }}</p>
+                        <h3>{{ $project->name }}</h3>
+                        <p>{{ $project->description }}</p>
+                        <h4>Technologies:</h4>
+                        <ul>
+                            @foreach ($project->technologies as $technology)
+                                <li>{{ $technology->name }}</li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>

@@ -25,6 +25,13 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="technologies">Technologies</label><br>
+                                @foreach ($technologies as $technology)
+                                    <input type="checkbox" name="technologies[]" value="{{ $technology->id }}">
+                                    {{ $technology->name }}<br>
+                                @endforeach
+                            </div>
                             <button type="submit" class="btn btn-primary">Create</button>
                         </form>
                     </div>
