@@ -2,29 +2,28 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Project;
 use App\Models\Technology;
+use Faker\Generator;
 
-class TechnologiesTableSeeder extends Seeder
+class ProjectTechnologySeeder extends Seeder
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(Generator $faker)
     {
-        
-        $technologies = [
-            ['name' => 'Laravel'],
-            ['name' => 'Vue.js'],
-            
-            
-        ];
+        $projects = Project::all();
+        $technologies = Technology::all()->pluck('id')->toArray();
 
-        
-        foreach ($technologies as $technology) {
-            Technology::create($technology);
+        foreach ($projects as $project) {
+            $project
+                ->technologies()
+                ->attach($faker->randomElements($technologies, random_int(0, 3)));
         }
     }
 }
